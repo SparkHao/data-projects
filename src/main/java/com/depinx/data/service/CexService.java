@@ -50,18 +50,15 @@ public class CexService {
                     long endTime = System.currentTimeMillis();
                     long startTime = endTime - TimeUnit.DAYS.toMillis(entry.getValue());
                     ResponseParam params = queryOkx(coinName, startTime, endTime);
-                    if (params == null) {
-                        continue;
+                    if (params != null) {
+                        okxTwapData.append(params.getTwap()).append("/");
+                        okxMaDate.append(params.getMa()).append("/");
                     }
-                    okxTwapData.append(params.getTwap()).append("/");
-                    okxMaDate.append(params.getMa()).append("/");
-
                     params = queryBn(coinName, startTime, endTime);
-                    if (params == null) {
-                        continue;
+                    if (params != null) {
+                        bnTwapData.append(params.getTwap()).append("/");
+                        bnMaDate.append(params.getMa()).append("/");
                     }
-                    bnTwapData.append(params.getTwap()).append("/");
-                    bnMaDate.append(params.getMa()).append("/");
                 }
                 response.setOkxTwap(StringUtils.removeTrailingSlash(bnTwapData.toString()));
                 response.setOkxMa(StringUtils.removeTrailingSlash(bnMaDate.toString()));
@@ -70,18 +67,15 @@ public class CexService {
             }else {
 
                 ResponseParam params = queryOkx(coinName, queryRequest.getStartTime().getTime(), queryRequest.getEndTime().getTime());
-                if (params == null) {
-                    return null;
+                if (params != null) {
+                    response.setOkxTwap(StringUtils.removeTrailingSlash(params.getTwap()));
+                    response.setOkxMa(StringUtils.removeTrailingSlash(params.getMa()));
                 }
-                response.setOkxTwap(StringUtils.removeTrailingSlash(params.getTwap()));
-                response.setOkxMa(StringUtils.removeTrailingSlash(params.getMa()));
-
                 params = queryBn(coinName, queryRequest.getStartTime().getTime(), queryRequest.getEndTime().getTime());
-                if (params == null) {
-                    return null;
+                if (params != null) {
+                    response.setBnTwap(StringUtils.removeTrailingSlash(params.getTwap()));
+                    response.setBnMa(StringUtils.removeTrailingSlash(params.getMa()));
                 }
-                response.setBnTwap(StringUtils.removeTrailingSlash(params.getTwap()));
-                response.setBnMa(StringUtils.removeTrailingSlash(params.getMa()));
             }
             dataEntities.add(response);
         }
@@ -96,11 +90,10 @@ public class CexService {
                     "?symbol=" + symbol + "&interval=1h" +
                     "&startTime=" + startTime + "&endTime=" + endTime +
                     "&limit=1000";
-            log.info("url:{}", url);
-
+            log.info("query bn url:{}", url);
             RestTemplate restTemplate = new RestTemplate();
             String response = restTemplate.getForObject(url, String.class);
-            log.info("response: {}", response);
+            log.info("query bn response: {}", response);
             JSONArray arr = JSONArray.parseArray(response);
             List<Double> closes = new ArrayList<>();
             double total = 0;
@@ -136,10 +129,10 @@ public class CexService {
                     "?instId=" + okxSymbol + "&bar=1H" +
                     "&after=" + endTime + "&before=" + startTime +
                     "&limit=1000";
-            log.info("url:{}", url);
+            log.info("queryOkx url:{}", url);
             RestTemplate restTemplate = new RestTemplate();
             String response = restTemplate.getForObject(url, String.class);
-            log.info("response: {}", response);
+            log.info("queryOkx response: {}", response);
             JSONObject result = JSONObject.parseObject(response);
             if (!"0".equals(result.getString("code"))) {
                 log.warn("OKX Error: {}", result.getString("msg"));
@@ -147,7 +140,6 @@ public class CexService {
             }else {
                 JSONArray dataArr = result.getJSONArray("data");
                 log.info("dataArr size:{}", dataArr.size());
-                double length = dataArr.size();
                 List<Double> closes = new ArrayList<>();
                 double total = 0;
                 double volume = 0;
@@ -184,7 +176,7 @@ public class CexService {
                     .toUriString();
 
             String responseStr = restTemplate.getForObject(uri, String.class);
-            log.info("responseStr:{}", responseStr);
+            log.info("price responseStr:{}", responseStr);
             JSONObject json = JSONObject.parseObject(responseStr);
 
             if ("0".equals(json.getString("code"))) {

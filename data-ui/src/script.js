@@ -50,15 +50,19 @@ connectBtn.addEventListener('click', async () => {
 });
 
 refreshBtn.addEventListener('click', async () => {
+    refreshBtn.disabled = true;
     const res = await fetch(`${BASE_URL}/public/refreshLark`);
 
     console.log("refresh: ", res);
     await loadTokenList()
+    refreshBtn.disabled = false;
 })
 
 const tokenSelect = document.getElementById("tokenSelect");
 const tableBody = document.querySelector("#coinTable tbody");
 const loadBtn = document.getElementById("loadDataBtn");
+const startTimeInput = document.getElementById("startTime");
+const endTimeInput = document.getElementById("endTime");
 
 // 加载代币名称列表
 async function loadTokenList() {
@@ -78,13 +82,22 @@ async function loadTokenList() {
 // 根据选中的代币获取数据
 async function loadTokenData() {
     const selected = tokenSelect.value;
+    const startTime = startTimeInput.value;
+    const endTime = endTimeInput.value;
+    loadBtn.disabled = true;
 
     const res = await fetch(`${BASE_URL}/public/query`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ coinName: selected })
+        body: JSON.stringify(
+      {
+                coinName: selected,
+                startTime: startTime,
+                endTime: endTime
+            }
+        )
     });
     const data = await res.json();
     const insertData = data.data;
@@ -104,6 +117,7 @@ async function loadTokenData() {
         `;
         tableBody.appendChild(tr);
     });
+    loadBtn.disabled = false;
 }
 
 // 初始化

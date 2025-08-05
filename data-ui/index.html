@@ -64,12 +64,15 @@
 <button id="refreshBtn">刷新Lark数据</button>
 
 <!-- 代币选择与查询 -->
-<h3>选择代币名称</h3>
-<select id="tokenSelect">
-    <option value="">-- 加载中 --</option>
-</select>
-<button id="loadDataBtn">查询代币数据</button>
-
+<h3>查询</h3>
+<div>
+    <select id="tokenSelect">
+        <option value="">-- 加载中 --</option>
+    </select>
+    <label>开始时间</label><input type="date" id="startTime" />
+    <label>结束时间</label><input type="date" id="endTime" />
+    <button id="loadDataBtn">查询代币数据</button>
+</div>
 <!-- 代币数据表格 -->
 <table id="coinTable">
     <thead>
