@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Multi-Token Staking App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h3 {
+            margin-top: 30px;
+        }
+
+        button {
+            margin: 5px;
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+
+        select {
+            padding: 6px;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        pre {
+            background: #f8f8f8;
+            padding: 10px;
+            border: 1px solid #ccc;
+            max-width: 700px;
+            white-space: pre-wrap;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            table-layout: fixed;
+            word-break: break-word;
+        }
+
+        table th, table td {
+            border: 1px solid #999;
+            padding: 8px;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+<h2></h2>
+
+<!-- 操作按钮 -->
+<div style="display: flex; justify-content: space-between; align-items: center;">
+    <h2>数据平台</h2>
+    <button id="connectBtn">连接钱包</button>
+</div>
+<button id="refreshBtn">刷新Lark数据</button>
+
+<!-- 代币选择与查询 -->
+<h3>选择代币名称</h3>
+<select id="tokenSelect">
+    <option value="">-- 加载中 --</option>
+</select>
+<button id="loadDataBtn">查询代币数据</button>
+
+<!-- 代币数据表格 -->
+<table id="coinTable">
+    <thead>
+    <tr>
+<!--        <th>项目名称</th>-->
+        <th>代币名称</th>
+        <th>代币价格</th>
+        <th>OKX TWAP (3/5/7)</th>
+        <th>OKX MA (3/5/7)</th>
+        <th>Binance TWAP (3/5/7)</th>
+        <th>Binance MA (3/5/7)</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<!-- JS -->
+<script type="module" src="./src/script.js"></script>
+</body>
+</html>
